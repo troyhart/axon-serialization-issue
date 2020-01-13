@@ -1,0 +1,41 @@
+version: '3'
+
+volumes:
+  demo-db_data:
+  demo-axonserver_data:
+
+services:
+
+  axonserver:
+    image: axoniq/axonserver:4.2
+    ports:
+      - 8024:8024
+      - 8124:8124
+    environment:
+      - AXONSERVER_HOSTNAME=axonserver
+    volumes:
+      - demo-axonserver_data:/opt/axonserver/data
+
+  demo-db:
+    image: postgres:11.3-alpine
+    ports:
+      - 5439:5432
+    volumes:
+      - demo-db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=demo
+      - POSTGRES_USER=demo
+      - POSTGRES_PASSWORD=demo
+
+  demo:
+    image: axon-serialization-issue:latest
+    environment:
+      # NOTE: see environment config file -> .env
+      - SPRING_PROFILES_ACTIVE
+      - JAVA_TOOL_OPTIONS
+    ports:
+      - 8081:8081
+      - 8000:8000
+    depends_on:
+      - demo-db
+      - axonserver

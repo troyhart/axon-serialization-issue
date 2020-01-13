@@ -1,0 +1,38 @@
+
+server:
+  port: 8081
+
+axon:
+  axonserver:
+    servers: axonserver
+  serializer:
+    events: jackson
+
+spring:
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://demo-db:5432/demo
+    username: demo
+    password: demo
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: false
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+
+---
+
+spring.profiles: dev
+
+debug: true
+
+server:
+  error:
+    include-exception: true
